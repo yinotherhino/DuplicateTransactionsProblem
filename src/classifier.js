@@ -1,65 +1,62 @@
 function classifier(input) {
+    //for invalid inputs throw error
     if(!Array.isArray(input)){
         throw Error
     }
+    //for empty array return {noOfGroups: 0}
     else if (Array.isArray(input) && !input.length){
         return {'noOfGroups': 0}
     }
-    //copy input into another object so that the initial object is preserved
-    let inputObj= JSON.parse(JSON.stringify(input))
-    let baseDate= new Date(2019, 0, 1).getFullYear();
-    let agesArray= inputObj.map((x)=> {
-        // if(x.regNo[0]=='0'){
-        //     regNos= x.regNo.slice(1)
-        // }
-        
+    //copy input into another object so that the initial object is not mutated
+    let inputObj= JSON.parse(JSON.stringify(input));
+    //assume current date is 2019
+    let baseDate= new Date(2019, 1, 1).getFullYear();
+    let groupNo=0;
+    let result= {};
+    //an array of the details we need from the input to enable easy navigation
+    let arrayOfDetails= inputObj.map((x)=> {
         return [x.name, x.regNo, baseDate- (new Date(x.dob)).getFullYear(), x.dob]
-        
     })
-    
-    agesArray= agesArray.sort((a,b)=> a[2] -b[2]);
-    // console.log(agesArray)
-    // return agesArray;
-    let count=0;
-    let obj= {
-    };
-    for (let i=0; i<agesArray.length; i++){
-        // TO DO I have to convert the agesArray to Concatenated Numbers for easy comparison
-        if (!obj['group'+count] || obj['group'+count]['members'].length==3){
-            count++
-            obj.noOfGroups = count;
-            // obj['group'+count]=[agesArray[i]]
-            obj['group'+count]= {
+    //sort arrayOfDetails by age which is at the second index of each element
+    arrayOfDetails= arrayOfDetails.sort((a,b)=> a[2] -b[2]);
+
+    for (let i=0; i<arrayOfDetails.length; i++){
+        // create new group if group doesnt exist yet or group length is already equals 3
+        if (!result['group'+groupNo] || result['group'+groupNo]['members'].length==3){
+            groupNo++
+            result.noOfGroups = groupNo;
+            result['group'+groupNo]= {
                 members: [
-                    {name:agesArray[i][0], dob: agesArray[i][3], regNo: agesArray[i][1],age:agesArray[i][2]}
+                    {name:arrayOfDetails[i][0], dob: arrayOfDetails[i][3], regNo: arrayOfDetails[i][1],age:arrayOfDetails[i][2]}
                 ],
-                oldest: agesArray[i][2],
-                sum: agesArray[i][2],
-                regNos: [Number(agesArray[i][1])]
+                oldest: arrayOfDetails[i][2],
+                sum: arrayOfDetails[i][2],
+                regNos: [Number(arrayOfDetails[i][1])]
             }
         }
         //if age diff is less than 5 and members are not yet up to three add new member
-        else if((agesArray[i][2] - obj['group'+count]['members'][obj['group'+count]['members'].length-1]['age'])<=5 && obj['group'+count]['members'].length<=3){
-            obj['group'+count]['members'].push({name:agesArray[i][0], dob: agesArray[i][3], regNo: agesArray[i][1], age:agesArray[i][2] });
-            obj['group'+count]['oldest']= agesArray[i][2];
-            obj['group'+count]['sum']= obj['group'+count]['sum'] + agesArray[i][2];
-            obj['group'+count]['regNos'].push(Number(agesArray[i][1]))
-            obj['group'+count]['regNos'].sort((a,b)=> a-b)
+        else if((arrayOfDetails[i][2] - result['group'+groupNo]['members'][result['group'+groupNo]['members'].length-1]['age'])<=5 && result['group'+groupNo]['members'].length<=3){
+            result['group'+groupNo]['members'].push({name:arrayOfDetails[i][0], dob: arrayOfDetails[i][3], regNo: arrayOfDetails[i][1], age:arrayOfDetails[i][2] });
+            result['group'+groupNo]['oldest']= arrayOfDetails[i][2];
+            result['group'+groupNo]['sum']= result['group'+groupNo]['sum'] + arrayOfDetails[i][2];
+            result['group'+groupNo]['regNos'].push(Number(arrayOfDetails[i][1]))
+            result['group'+groupNo]['regNos'].sort((a,b)=> a-b)
         }
-        else if((agesArray[i][2] - obj['group'+count]['members'])>5 || obj['group'+count]['members'].length<=3){
-            count++;
-            obj.noOfGroups = count;
-            obj['group'+count]= {
+        //if age difference between last member and new prospective member is more than 5 create new group
+        else if((arrayOfDetails[i][2] - result['group'+groupNo]['members'])>5 || result['group'+groupNo]['members'].length<=3){
+            groupNo++;
+            result.noOfGroups = groupNo;
+            result['group'+groupNo]= {
                 members: [
-                    {name:agesArray[i][0], dob: agesArray[i][3], regNo: agesArray[i][1], age: agesArray[i][2] }
+                    {name:arrayOfDetails[i][0], dob: arrayOfDetails[i][3], regNo: arrayOfDetails[i][1], age: arrayOfDetails[i][2] }
                 ],
-                oldest: agesArray[i][2],
-                sum: agesArray[i][2],
-                regNos: [Number(agesArray[i][1])]
+                oldest: arrayOfDetails[i][2],
+                sum: arrayOfDetails[i][2],
+                regNos: [Number(arrayOfDetails[i][1])]
             }
         }
     }
-    return(obj);
+    return(result);
 }
 
 

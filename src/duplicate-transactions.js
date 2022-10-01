@@ -5,18 +5,27 @@ function findDuplicateTransactions(transactions) {
     else if (Array.isArray(transactions) && transactions.length<2){
         return [];
     }
-
+    let resultObj= {}
     let inputObj= JSON.parse(JSON.stringify(transactions))
-    // let baseDate= new Date(2019, 0, 1);
 
-    mulipleTrans = inputObj.map((x,i)=>{
-        return inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount'];
+    let multipleTrans = inputObj.map((x,i)=>{
+        return inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
     });
-    
     multipleTrans= multipleTrans.filter((x,i)=>{
-        return (mulipleTrans.slice(0,i).includes(mulipleTrans[i]) || mulipleTrans.slice(i+1).includes(mulipleTrans[i]))
+        return (multipleTrans.slice(0,i).includes(multipleTrans[i]) || multipleTrans.slice(i+1).includes(multipleTrans[i]))
     })
 
+    let duplicateTransactions= Array.from(new Set(multipleTrans))
+    duplicateTransactions.forEach((x) => {
+        resultObj[x]=[]
+    })
+
+    inputObj.forEach((x,i)=>{
+        let concat= inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
+        if (resultObj[concat]){
+            resultObj[concat].push(inputObj[i]);
+        }
+    })
 
     //duplicates have same source, target, category and amount
     //but different time and id
@@ -24,9 +33,8 @@ function findDuplicateTransactions(transactions) {
 
     //group these elements by 1min diffs
 
-
     
-    return multipleTrans
+    return resultObj
 
 }
 
