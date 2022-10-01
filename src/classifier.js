@@ -7,13 +7,13 @@ function classifier(input) {
     }
     //copy input into another object so that the initial object is preserved
     let inputObj= JSON.parse(JSON.stringify(input))
-    let baseDate= new Date(2019, 0, 1);
+    let baseDate= new Date(2019, 0, 1).getFullYear();
     let agesArray= inputObj.map((x)=> {
         // if(x.regNo[0]=='0'){
         //     regNos= x.regNo.slice(1)
         // }
         
-        return [x.name, x.regNo, Math.ceil((baseDate-new Date(x.dob))/(1000*60*60*24*365).toFixed(1)), x.dob,]
+        return [x.name, x.regNo, baseDate- (new Date(x.dob)).getFullYear(), x.dob]
         
     })
     
