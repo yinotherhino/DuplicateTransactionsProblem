@@ -22,7 +22,7 @@ function classifier(input) {
 
     for (let i=0; i<arrayOfDetails.length; i++){
         // create new group if group doesnt exist yet or group length is already equals 3
-        if (!result['group'+groupNo] || result['group'+groupNo]['members'].length==3){
+        if (!result['group'+groupNo] || result['group'+groupNo]['members'].length==3 || (arrayOfDetails[i][2] - result['group'+groupNo]['members'][0]['age'])>5){
             groupNo++
             result.noOfGroups = groupNo;
             result['group'+groupNo]= {
@@ -41,19 +41,6 @@ function classifier(input) {
             result['group'+groupNo]['sum']= result['group'+groupNo]['sum'] + arrayOfDetails[i][2];
             result['group'+groupNo]['regNos'].push(Number(arrayOfDetails[i][1]))
             result['group'+groupNo]['regNos'].sort((a,b)=> a-b)
-        }
-        //if age difference between last member and new prospective member is more than 5 create new group
-        else if((arrayOfDetails[i][2] - result['group'+groupNo]['members'])>5 || result['group'+groupNo]['members'].length<=3){
-            groupNo++;
-            result.noOfGroups = groupNo;
-            result['group'+groupNo]= {
-                members: [
-                    {name:arrayOfDetails[i][0], dob: arrayOfDetails[i][3], regNo: arrayOfDetails[i][1], age: arrayOfDetails[i][2] }
-                ],
-                oldest: arrayOfDetails[i][2],
-                sum: arrayOfDetails[i][2],
-                regNos: [Number(arrayOfDetails[i][1])]
-            }
         }
     }
     return(result);

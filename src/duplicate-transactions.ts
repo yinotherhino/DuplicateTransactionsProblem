@@ -6,6 +6,7 @@ function findDuplicateTransactions(transactions) {
         return [];
     }
     let resultObj= {}
+    //copy the input into another object to avoid mutation
     let inputObj= JSON.parse(JSON.stringify(transactions))
     inputObj.sort((a,b) =>{
         a= new Date(a.time).getTime();
@@ -25,12 +26,12 @@ function findDuplicateTransactions(transactions) {
     })
 
     inputObj.forEach((x,i)=>{
-        let concat= inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
-        if(!resultObj[concat]){
+        let concatenatedVars= inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
+        if(!resultObj[concatenatedVars]){
          return
         }
-        else if(resultObj[concat] ){ 
-            resultObj[concat].push(inputObj[i])
+        else if(resultObj[concatenatedVars] ){ 
+            resultObj[concatenatedVars].push(inputObj[i])
         }
     })
 
@@ -39,6 +40,7 @@ function findDuplicateTransactions(transactions) {
     for (let i=0; i<arrays.length; i++){
         result.push(resultObj[arrays[i]])
     }
+    //TO DO remove nested for loop and do this inside the first for loop
     for (let i=0; i<result.length; i++){
         for (let j=1; j<result[i].length; j++){
             let timeOfLastTransaction= new Date (result[i][j-1]['time']).getTime();
@@ -50,8 +52,12 @@ function findDuplicateTransactions(transactions) {
         }
     }
     result= result.filter(x=> x.length>1)
-    
-    return result.sort((a,b)=> a[0]['id']-b[0]['id'])
+    //sort the final result based the time of the first transaction
+    return result.sort((a,b)=> {
+        a= new Date(a[0]['time'])
+        b= new Date(b[0]['time'])
+        return a-b
+    })
 
 }
 
