@@ -1,4 +1,4 @@
-function classifier(input) {
+function classifier(input: []) {
     //for invalid inputs throw error
     if(!Array.isArray(input)){
         throw Error
@@ -8,18 +8,38 @@ function classifier(input) {
         return {'noOfGroups': 0}
     }
     //copy input into another object so that the initial object is not mutated
-    let baseDate= new Date(2019, 1, 1).getFullYear();
-    let groupNo=0;
-    let result= {};
+    let baseDate: number= new Date(2019, 1, 1).getFullYear();
+    let groupNo: number=0;
+
+    
+    interface membersObj{
+        'name': string;
+        'regNo': string;
+        'age': number;
+        'dob': string
+    }
+    interface group{
+        'members': Array<membersObj>;
+        'oldest': number;
+        'sum': number;
+        'regNos': Array<number>;
+    }
+
+    type resultObj= {
+        [index: string]: any
+    }
+    let result: resultObj= {};
+
+    
     //an array of the details we need from the input to enable easy navigation
-    let arrayOfDetails= input.map((x)=> {
+    let arrayOfDetails:Array<membersObj> = input.map((x:membersObj)=> {
         return {'name':x.name, 'regNo': x.regNo, 'age': baseDate- (new Date(x.dob)).getFullYear(), 'dob':x.dob};
     })
     //sort arrayOfDetails by age
     arrayOfDetails= arrayOfDetails.sort((a,b)=> a.age -b.age);
     for (let i=0; i<arrayOfDetails.length; i++){
         // create new group if group doesnt exist yet or group length is already equals 3 or age is 5yrs older than youngest member
-        if (!result['group'+groupNo] || result['group'+groupNo]['members'].length==3 || (arrayOfDetails[i].age - result['group'+groupNo]['members'][0]['age'])>5){
+        if (!result['group'+groupNo] || result['group'+groupNo].members.length==3 || (arrayOfDetails[i].age - result['group'+groupNo]['members'][0]['age'])>5){
             groupNo++;
             result.noOfGroups = groupNo;
             result['group'+groupNo]= {
@@ -35,7 +55,7 @@ function classifier(input) {
             result['group'+groupNo]['oldest']= arrayOfDetails[i].age;
             result['group'+groupNo]['sum']= result['group'+groupNo]['sum'] + arrayOfDetails[i].age;
             result['group'+groupNo]['regNos'].push(Number(arrayOfDetails[i].regNo));
-            result['group'+groupNo]['regNos'].sort((a,b)=> a-b);
+            result['group'+groupNo]['regNos'].sort((a:number,b:number)=> a-b);
         }
     }
     return(result);
