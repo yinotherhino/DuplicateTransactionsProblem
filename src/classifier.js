@@ -8,13 +8,11 @@ function classifier(input) {
         return {'noOfGroups': 0}
     }
     //copy input into another object so that the initial object is not mutated
-    let inputObj= JSON.parse(JSON.stringify(input));
-    //assume current date is 2019
     let baseDate= new Date(2019, 1, 1).getFullYear();
     let groupNo=0;
     let result= {};
     //an array of the details we need from the input to enable easy navigation
-    let arrayOfDetails= inputObj.map((x)=> {
+    let arrayOfDetails= input.map((x)=> {
         return {'name':x.name, 'regNo': x.regNo, 'age': baseDate- (new Date(x.dob)).getFullYear(), 'dob':x.dob};
     })
     //sort arrayOfDetails by age

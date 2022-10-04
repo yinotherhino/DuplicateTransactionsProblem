@@ -14,11 +14,11 @@ function findDuplicateTransactions(transactions) {
         return a - b;
     })
     let multipleTrans = inputObj.map((x,i)=>{
-        return inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
+        return inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['category'];
     });
     //filter out single transactions
     multipleTrans= multipleTrans.filter((x,i)=>{
-        return (multipleTrans.slice(0,i).includes(multipleTrans[i]) || multipleTrans.slice(i+1).includes(multipleTrans[i]))
+        return (multipleTrans.slice(i+1).includes(multipleTrans[i]));
     })
 
     let duplicateTransactions= Array.from(new Set(multipleTrans))
@@ -27,7 +27,7 @@ function findDuplicateTransactions(transactions) {
     })
 
     inputObj.forEach((x,i)=>{
-        let concatenatedVars= inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['targetAccount']+ inputObj[i]['category'];
+        let concatenatedVars= inputObj[i]['sourceAccount']+ inputObj[i]['targetAccount']+ inputObj[i]['amount'] + inputObj[i]['category'];
         if(!resultObj[concatenatedVars]){
          return
         }
@@ -39,6 +39,7 @@ function findDuplicateTransactions(transactions) {
     for (let i=0; i<arrays.length; i++){
         result.push(resultObj[arrays[i]])
     }
+    
     //remove transactions that are more than 1min apart
     for (let i=0; i<result.length; i++){
         for (let j=1; j<result[i].length; j++){
