@@ -28,6 +28,8 @@ While in active development, you can run the tests by running
 yarn test --watch
 ```
 
+You can find the problem statement in Question-1.md and Question-2.md
+
 The classifier program was written in typescript
 
 You can change the .js files in the duplicate transactions to .ts and modify the program to typescript.
