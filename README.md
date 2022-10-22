@@ -1,12 +1,14 @@
-# WEEK-2-TASK-SQ012
-
 # Engineering Problems
 
-This repo contains the duplicate transactions problem you should be able to solve in a reasonable amount of time. It tests your understanding of JavaScript fundamentals.
+#Duplicate transactions and Grouping by age problems
 
-## Running tests
+This repo contains the duplicate transactions program which helps to measure ones knowledge of javascript and tests your understanding of JavaScript fundamentals and the a program that groups some users based on ages.
 
-First, you need to install the dependencies for the project by running
+## To run the project on your machine
+
+first, Clone the project
+
+you need to install the dependencies for the project by running
 
 ```sh
 yarn
@@ -18,6 +20,8 @@ Then, you can run the tests by running
 yarn test
 ```
 
+You can also add more new test cases to test the effeciency of the program.
+
 While in active development, you can run the tests by running
 
 ```sh
@@ -25,7 +29,8 @@ yarn test --watch
 ```
 
 ## Stretch Goals
+The classifier program was written in typescript
 
-You can also choose to solve this challenge in [typescript](https://www.typescriptlang.org) by changing the file extension of the `.js` file in the `src` folder to `.ts`. i.e rename `src/duplicate-transactions.js` to `src/duplicate-transactions.ts`
+You can change the .js files in the duplicate transactions to .ts and modify the program to typescript.
 
-Your file would be typechecked when you run the test. This project is already configured to run the tests either in js or ts.
+This project is already configured to run the tests either in js or ts.
